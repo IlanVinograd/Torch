@@ -1,8 +1,14 @@
 # Torch - File Management Tool
 
+![Torch](https://github.com/IlanVinograd/Torch/blob/main/icon256x256.png)
+
 Torch is a simple and intuitive file management application that allows you to browse, select, and copy files or folders with ease. This app is designed to work seamlessly on Windows.
 
----
+## Illustration
+
+Here’s a quick demonstration of Torch in action:
+
+![TorchPNG](https://github.com/IlanVinograd/Torch/blob/main/torch.gif)
 
 ## Features
 
