@@ -11,7 +11,7 @@ class FileSelectorApp(tk.Tk):
         
         # Set the application icon
         try:
-            self.iconbitmap(".\Icon\icon.ico")  # Replace "icon.ico" with the path to your .ico file
+            self.iconbitmap(".\\Icon\\icon.ico")  # Replace "icon.ico" with the path to your .ico file
         except Exception as e:
             print(f"Error setting icon: {e}")
 
