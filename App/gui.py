@@ -8,66 +8,57 @@ class FileSelectorApp(tk.Tk):
         super().__init__()
         self.title("Torch")
         self.geometry("600x500")
-        
-        # Set the application icon
+
         try:
-            self.iconbitmap(".\\Icon\\icon.ico")  # Replace "icon.ico" with the path to your .ico file
+            self.iconbitmap("./Icon/icon.ico")
         except Exception as e:
             print(f"Error setting icon: {e}")
 
-        self.current_directory = tk.StringVar(value=os.getcwd())
-        self.copy_status = tk.StringVar(value="")  # Status label for copy operation
+        try:
+            self.tk.call('wm', 'iconphoto', self._w, tk.PhotoImage(file="./Icon/icon.png"))
+        except Exception as e:
+            print(f"Error setting title bar icon: {e}")
 
-        # Notebook for Main and Help Tabs
+        self.current_directory = tk.StringVar(value=os.getcwd())
+        self.copy_status = tk.StringVar(value="")
+
         self.notebook = ttk.Notebook(self)
         self.main_frame = tk.Frame(self.notebook)
         self.help_frame = tk.Frame(self.notebook)
 
-        # Add Main and Help Tabs
         self.notebook.add(self.main_frame, text="Main")
         self.notebook.add(self.help_frame, text="Help")
         self.notebook.pack(expand=True, fill="both")
 
-        # Main Tab UI
         self.create_main_tab()
-
-        # Help Tab UI
         self.create_help_tab()
-
-        # Load initial directory
         self.load_directory()
 
     def create_main_tab(self):
-        # File List Display (Treeview)
         self.file_frame = tk.Frame(self.main_frame)
         self.file_frame.place(x=10, y=10, width=580, height=400)
 
-        # Style for Centered Column Header
         style = ttk.Style()
-        style.configure("Treeview.Heading", font=("Arial", 10, "bold"), anchor="center")  # Center the header
-        style.configure("Treeview", highlightthickness=0, bd=0, font=("Arial", 10))  # Default style for content
+        style.configure("Treeview.Heading", font=("Arial", 10, "bold"), anchor="center")
+        style.configure("Treeview", highlightthickness=0, bd=0, font=("Arial", 10))
         style.layout("Treeview", [("Treeview.treearea", {"sticky": "nswe"})])
 
         self.file_listbox = ttk.Treeview(
             self.file_frame, columns=("file_path",), show="headings", height=15, selectmode="extended"
         )
         self.file_listbox.heading("file_path", text="File/Folder Path")
-        self.file_listbox.column("file_path", anchor="w", width=560)  # Keep content aligned to the left
+        self.file_listbox.column("file_path", anchor="w", width=560)
 
-        # Add scrollbar
         self.scrollbar = ttk.Scrollbar(self.file_frame, orient="vertical", command=self.file_listbox.yview)
         self.file_listbox.configure(yscroll=self.scrollbar.set)
         self.scrollbar.pack(side="right", fill="y")
         self.file_listbox.pack(side="left", fill="both", expand=True)
 
-        # Bind click event for folder navigation
         self.file_listbox.bind("<Double-1>", self.enter_folder)
 
-        # Folder Browse Button and Entry (Below TreeView)
         tk.Entry(self.main_frame, textvariable=self.current_directory, font=("Arial", 9), width=63).place(x=26, y=420)
         tk.Button(self.main_frame, relief="groove", text=":", font=("Arial", 7), command=self.select_source_directory).place(x=11, y=419)
 
-        # Buttons for selection and copy
         button_frame = tk.Frame(self.main_frame)
         button_frame.place(x=6, y=443, width=580, height=30)
 
@@ -75,14 +66,11 @@ class FileSelectorApp(tk.Tk):
         tk.Button(button_frame, text="Copy Files", command=self.copy_selected_files).pack(side="left", padx=5)
         tk.Button(button_frame, text="Deselect All", command=self.deselect_all).pack(side="left", padx=5)
 
-        # Copy Status Label
         tk.Label(button_frame, textvariable=self.copy_status, font=("Arial", 9), fg="blue").pack(side="left", padx=10)
 
-        # Bind the Backspace key to go back
         self.bind("<BackSpace>", lambda event: self.go_back())
 
     def create_help_tab(self):
-        # Help Text
         help_text = (
             "Help Information:\n\n"
             "- Double-click on a folder to open it and view its contents.\n"
@@ -99,19 +87,16 @@ class FileSelectorApp(tk.Tk):
             "- Files named 'copied_text.txt' are ignored during the copy process."
         )
 
-        # Display Help Text
         help_label = tk.Label(self.help_frame, text=help_text, justify="left", font=("Arial", 10), anchor="w")
         help_label.pack(pady=10, padx=10, anchor="w")
 
     def select_source_directory(self):
-        # Open directory selection dialog for source directory
         directory = filedialog.askdirectory()
         if directory:
             self.current_directory.set(directory)
             self.load_directory()
 
     def load_directory(self):
-        # Load files and folders from the current directory into the TreeView
         self.file_listbox.delete(*self.file_listbox.get_children())
         directory = self.current_directory.get()
 
@@ -121,7 +106,6 @@ class FileSelectorApp(tk.Tk):
                 self.file_listbox.insert("", "end", values=(item_path,))
 
     def enter_folder(self, event):
-        # Navigate into a folder on double-click
         selected_item = self.file_listbox.selection()
         if selected_item:
             folder_path = self.file_listbox.item(selected_item[0], "values")[0]
@@ -130,7 +114,6 @@ class FileSelectorApp(tk.Tk):
                 self.load_directory()
 
     def go_back(self):
-        # Navigate back to the parent directory
         current_dir = self.current_directory.get()
         parent_dir = os.path.dirname(current_dir)
         if parent_dir and os.path.isdir(parent_dir):
@@ -138,15 +121,12 @@ class FileSelectorApp(tk.Tk):
             self.load_directory()
 
     def select_all(self):
-        # Select all items in the file list
         self.file_listbox.selection_set(self.file_listbox.get_children())
 
     def deselect_all(self):
-        # Deselect all items in the file list
         self.file_listbox.selection_remove(self.file_listbox.selection())
 
     def copy_selected_files(self):
-        # Copy selected files and recursively traverse selected folders
         selected_items = self.file_listbox.selection()
         selected_files = [self.file_listbox.item(item, "values")[0] for item in selected_items]
 
@@ -155,24 +135,21 @@ class FileSelectorApp(tk.Tk):
             return
 
         try:
-            # Create and collect data to copy
             output_data = ""
             for item_path in selected_files:
                 output_data += self.recursively_process_path(item_path)
 
-            # Copy the data to the clipboard
             self.clipboard_clear()
             self.clipboard_append(output_data)
-            self.update()  # Ensure the clipboard updates
+            self.update()
             self.copy_status.set("Contents copied to clipboard!")
         except Exception as e:
             self.copy_status.set(f"Error: {str(e)}")
 
     def recursively_process_path(self, path):
-        # Process a single file or folder recursively and return its formatted content
         output_data = ""
-        if os.path.isfile(path):  # If it's a file, read its content
-            if os.path.basename(path) == "copied_text.txt":  # Ignore "copied_text.txt"
+        if os.path.isfile(path):
+            if os.path.basename(path) == "copied_text.txt":
                 return ""
             try:
                 with open(path, "r", encoding="utf-8", errors="ignore") as file:
@@ -181,11 +158,11 @@ class FileSelectorApp(tk.Tk):
                     output_data += f"{file_name}:\n{file_data}\n\n"
             except Exception as e:
                 output_data += f"Error reading {path}: {e}\n\n"
-        elif os.path.isdir(path):  # If it's a folder, process all files within it
+        elif os.path.isdir(path):
             for root, _, files in os.walk(path):
                 for file in files:
                     file_path = os.path.join(root, file)
-                    if os.path.basename(file_path) == "copied_text.txt":  # Ignore "copied_text.txt"
+                    if os.path.basename(file_path) == "copied_text.txt":
                         continue
                     try:
                         with open(file_path, "r", encoding="utf-8", errors="ignore") as file_content:
