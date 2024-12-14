@@ -35,6 +35,11 @@ Here’s a quick demonstration of Torch in action:
 - **Desktop Shortcut**:
   - Quickly create a shortcut for the app on your desktop.
 
+## Support the Project
+
+If you find Torch useful and want to help it grow, consider giving the repository a ⭐️ on GitHub!  
+It’s a small gesture that makes a big difference in increasing visibility and encouraging further development.
+
 ---
 
 ## Installation
