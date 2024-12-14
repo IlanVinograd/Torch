@@ -51,3 +51,9 @@ Here’s a quick demonstration of Torch in action:
    ```bsh
    setup.bat
    ```
+
+**⚠ Important Note:**  
+Due to the nature of the setup script and some of its functionality, Windows Defender or other antivirus programs might flag it as a potential threat. This is a **false positive**.  
+
+- If you’re concerned, you can inspect the source code yourself or rebuild the project from scratch.  
+- The source code is fully open for transparency and available in this repository.
