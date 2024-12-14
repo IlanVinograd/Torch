@@ -41,7 +41,7 @@ Here’s a quick demonstration of Torch in action:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/torch.git
+   git clone https://github.com/IlanVinograd/torch.git
    cd torch
 2. Navigate to the app directory:
    ```bash
