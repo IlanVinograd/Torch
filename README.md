@@ -48,11 +48,7 @@ It’s a small gesture that makes a big difference in increasing visibility and 
    ```bash
    git clone https://github.com/IlanVinograd/torch.git
    cd torch
-2. Navigate to the app directory:
-   ```bash
-   cd app
-   ```
-3. Run the setup script to create a desktop shortcut:
+2. Run the setup script to create a desktop shortcut:
    ```bsh
    setup.bat
    ```
